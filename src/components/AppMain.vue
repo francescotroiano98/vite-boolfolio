@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>
-            Ciaoo
+            Main
         </h1>
         
     </div>
