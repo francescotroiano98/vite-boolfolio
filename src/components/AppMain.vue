@@ -8,8 +8,8 @@
                 <h2>
                     {{ project.title }}
                 </h2>
-                <h4>
-                    Type: {{ project.type_id }}
+                <h4 :style="'color:' + project.type.color + ';'">
+                    Category: {{ project.type.name }}
                 </h4>
                 <h5>
                     {{ project.slug }}
@@ -45,8 +45,8 @@ export default{
                 params: {}
             })
             .then((response) => {
-                console.log(response.data.results);
-                this.projects = response.data.results;
+                console.log(response.data.results.data);
+                this.projects = response.data.results.data;
             })
             .catch(function (error) {
                 console.log(error);
