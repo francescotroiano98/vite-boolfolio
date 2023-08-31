@@ -3,6 +3,16 @@
         <h1 class="main-title">
             Latest Projects:
         </h1>
+
+        <nav class="pagination">
+            <li class="prev" @click="prevPage" v-if="prevPageUrl">
+                Previous
+            </li>
+            <li class="next" @click="nextPage" v-if="nextPageUrl">
+                Next
+            </li>
+        </nav>
+
         <div class="projects">
             <div class="single-project" v-for="project in projects">
                 <h2>
@@ -34,24 +44,39 @@ export default{
     data() {
         return {
             projects : [],
-            apiUrl : 'http://127.0.0.1:8000/api/projects'
+            apiUrl : 'http://127.0.0.1:8000/api/projects',
+
+            nextPageUrl : '',
+            currentPageNo: '',
+            prevPageUrl : '',
         }
     },
 
     methods: {
-        getProjects(){
-
-            axios.get(this.apiUrl, {
-                params: {}
-            })
+        getProjects(apiUrl = this.apiUrl){
+            // recuper i miei project e popolo la variabile projects
+            axios.get(apiUrl)
             .then((response) => {
-                console.log(response.data.results.data);
+                console.log(response)
                 this.projects = response.data.results.data;
+                this.nextPageUrl = response.data.results.next_page_url;
+                this.prevPageUrl = response.data.results.prev_page_url;
             })
             .catch(function (error) {
                 console.log(error);
             })
-        }
+        },
+
+        nextPage(){
+            // alert('next page');
+            this.getProjects(this.nextPageUrl);
+        },
+
+        prevPage(){
+            // alert('prev page');
+            this.getProjects(this.prevPageUrl);
+        },
+
     },
     created(){
         this.getProjects();
@@ -61,6 +86,41 @@ export default{
 
 </script>
 <style lang="scss">
+
+h1.main-title{
+        margin-bottom: 3rem;
+    }
+    div.posts{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    nav.pagination{
+        width: 100%;
+        padding: 1rem;
+        display: flex;
+        margin-bottom: 1rem;
+        // justify-content: space-between;
+        align-items: center;
+        background-color: black;
+        list-style-type: none;
+
+        li{
+            padding: 1rem;
+            background-color: rgb(230, 230, 230);
+            color: rgb(0, 0, 0);
+            cursor: pointer;
+
+            &.next{
+                margin-left: auto;
+            }
+        }
+        li:hover{
+            background-color: rgb(122, 122, 236);
+        }
+    }
 
 h1.main-title{
         margin-bottom: 3rem;
